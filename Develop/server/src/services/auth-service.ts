@@ -11,7 +11,6 @@ interface JwtPayload {
 }
 
 export const authenticateToken = ({ req }: { req: Request }) => {
-  // allows token to be sent via req.body, req.query, or headers
   let token = req.body.token || req.query.token || req.headers.authorization;
 
   if (req.headers.authorization) {
@@ -26,7 +25,7 @@ export const authenticateToken = ({ req }: { req: Request }) => {
     const { data }: any = jwt.verify(token, process.env.JWT_SECRET_KEY || '', { maxAge: '2hr' });
     req.user = data as JwtPayload;
   } catch (err) {
-    console.log('Invalid token');
+    console.log('Invalid Token');
   }
 
   return req;
@@ -34,14 +33,14 @@ export const authenticateToken = ({ req }: { req: Request }) => {
 
 export const signToken = (username: string, email: string, _id: unknown) => {
   const payload = { username, email, _id };
-  const secretKey: any = process.env.JWT_SECRET_KEY;
+  const secretKey = process.env.JWT_SECRET_KEY || '';
 
-  return jwt.sign({data: payload}, secretKey, { expiresIn: '2h' });
+  return jwt.sign(payload, secretKey, { expiresIn: '1h' });
 };
 
 export class AuthenticationError extends GraphQLError {
   constructor(message: string) {
-    super(message, undefined, undefined, undefined, ['UNAUTHENTICATED']);
+    super(message, undefined, undefined, undefined, ['UNATHENTICATED']);
     Object.defineProperty(this, 'name', { value: 'AuthenticationError' });
   }
-};
+}
