@@ -4,8 +4,13 @@ import type { Request, Response } from 'express';
 import db from './config/connection.js';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
-import { typeDefs, resolvers } from './schemas/index.js';
-import { authenticateToken } from './utils/auth.js';
+import { typeDefs, resolvers } from './schema/index.js';
+import { fileURLToPath } from 'node:url';
+
+import { authenticateToken } from './services/auth-service.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const server = new ApolloServer({
   typeDefs,
@@ -14,7 +19,7 @@ const server = new ApolloServer({
 
 const startApolloServer = async () => {
   await server.start();
-  await db();
+  await db;
 
   const PORT = process.env.PORT || 3001;
   const app = express();
