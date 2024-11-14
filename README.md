@@ -17,7 +17,6 @@
   - [Tests](#tests)
   - [Questions](#questions)
   - [Link](#link)
-  - 
  - [License](#license)
 
   ## Installation
